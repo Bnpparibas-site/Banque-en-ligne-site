@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BNP Paribas - Espace Client</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Arial', sans-serif; }
+    .bg-bnp-blue { background-color: #005B5B; }
+    .bg-bnp-light { background-color: #F5F6F5; }
+    .text-bnp-blue { color: #005B5B; }
+    .border-bnp-blue { border-color: #005B5B; }
+
+    /* Sidebar */
+    .sidebar { width: 0; position: fixed; top: 0; left: 0; height: 100%; background-color: #005B5B; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
+    .sidebar a { padding: 8px 16px; text-decoration: none; color: white; display: block; }
+    .sidebar a:hover { background-color: #003333; }
+
+    /* Welcome popup (transparent green) */
+    .popup-welcome {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(221, 255, 238, 0.85); /* light green translucent */
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 320px;
+      max-width: 90%;
+    }
+    .popup-welcome .check {
+      font-size: 26px;
+      background: rgba(0,91,91,0.06);
+      color: #0a8a47; /* green check color */
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .popup-welcome .text-small {
+      font-weight: 300; /* thin */
+      line-height: 1.05;
+      color: #07332f;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    /* Notification popup (similar green as site) */
+    .popup-notif {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #E6F6F5; /* pale green background */
+      border: 1px solid rgba(0,91,91,0.12);
+      border-radius: 10px;
+      padding: 18px;
+      min-width: 320px;
+      max-width: 360px;
+      z-index: 1000;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .popup-notif .header {
+      font-weight: 600;
+      color: #005B5B; /* site green */
+      font-size: 16px;
+    }
+    .popup-notif .body {
+      color: #07332f;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+    .popup-notif .divider {
+      height: 1px;
+      background: rgba(0,0,0,0.06);
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+    .popup-notif .controls {
+      display: flex;
+      justify-content: flex-start; /* close to the left */
+      padding-top: 6px;
+    }
+    .close-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(0,91,91,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    /* Thin text where requested */
+    .thin { font-weight: 300; }
+
+    @media (max-width: 640px) {
+      .popup-notif { right: 12px; left: 12px; top: 30%; }
+      .popup-welcome { top: 12%; }
+    }
+
+  </style>
+</head>
+<body class="bg-bnp-light">
+  <!-- Header -->
+  <header class="bg-bnp-blue text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <img src="https://group.bnpparibas/uploads/media/5ef5b7b6d0d4e/logo-bnp-paribas-2000.png" alt="BNP Paribas Logo" class="h-12">
+      <button id="menuBtn" class="openbtn">☰</button>
+    </div>
+  </header>
+
+  <!-- Account Dashboard -->
+  <section class="py-12">
+    <div class="container mx-auto">
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-semibold">Bonsoir</h2>
+        <h2 class="text-xl font-semibold">MR MARIO LAMBERT</h2>
+        <p>Dernière connexion: 24/07/2025 20:47</p>
+      </div>
+      <div class="bg-bnp-blue text-white p-6 rounded-lg text-center">
+        <h3 class="text-2xl font-bold">COMPTE DE DÉPÔT n°72611780414</h3>
+        <h3 class="text-2xl font-bold">MARIO LAMBERT</h3>
+        <div class="flex justify-center items-center mt-2">
+          <span class="text-3xl font-bold">1 270 157,10 €</span>
+          <span class="ml-2 text-xl">★</span>
+        </div>
+      </div>
+
+      <!-- Statut du compte -->
+      <div class="mt-4 text-center">
+        <p class="text-base">Statut du compte : <span style="color:black">Statut du compte :</span> <span style="color:red;font-weight:700">Bloqué</span></p>
+      </div>
+
+      <div class="mt-6">
+        <h4 class="text-lg font-semibold text-bnp-blue">Dernières opérations</h4>
+        <ul class="list-none space-y-2 mt-2">
+          <li>30/06 VIR REÇU <span class="float-right">17 000,00 €</span></li>
+          <li>30/06 VIR REÇU <span class="float-right">45 000,00 €</span></li>
+          <li>28/06 VIR SORTANT <span class="float-right">-396 000,00 €</span></li>
+        </ul>
+      </div>
+      <div class="mt-6 bg-bnp-blue p-4 rounded-lg text-white text-center">
+        <h4 class="text-lg font-semibold">IMPORTANT</h4>
+        <p>Veillez à maintenir vos coordonnées à jour pour une relation personnalisée et sécurisée.</p>
+        <a href="bank-details.html" class="bg-white text-bnp-blue px-4 py-2 mt-2 rounded inline-block">Accéder à mes comptes</a>
+      </div>
+      <div class="flex justify-around mt-6 text-bnp-blue">
+        <a href="index.html" class="flex flex-col items-center"><span>🏠</span> Accueil</a>
+        <a href="bank-details.html" class="flex flex-col items-center"><span>💰</span> Comptes</a>
+        <a href="contact.html" class="flex flex-col items-center"><span>💬</span> Contact</a>
+        <a href="transfer.html" class="flex flex-col items-center"><span>↔️</span> Virement</a>
+        <a href="#" id="openSidebar" class="flex flex-col items-center"><span>☰</span> Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar">
+    <a href="index.html">Accueil</a>
+    <a href="bank-details.html">Comptes</a>
+    <a href="contact.html">Contact</a>
+    <a href="transfer.html">Virement</a>
+    <a href="index.html" class="text-red-500 mt-4">Déconnexion</a>
+  </div>
+
+  <!-- Welcome popup (appears first, transparent, disappears after 5s) -->
+  <div id="welcomePopup" class="popup-welcome" role="dialog" aria-live="polite" aria-label="Bienvenue">
+    <div class="check" aria-hidden="true">✅</div>
+    <div>
+      <div class="text-small thin">Bienvenu(e) MR LAMBERT</div>
+      <div class="text-small thin">MARIO sur votre espace, en ligne.</div>
+    </div>
+  </div>
+
+  <!-- Notification popup (appears automatically, behind the welcome popup) -->
+  <div id="notifPopup" class="popup-notif" role="alertdialog" aria-live="assertive" aria-label="Notification">
+    <div class="header">Notification</div>
+    <div class="body">
+Chèr(e) Client(e),
+Votre compte est momentanément bloqué
+    </div>
+    <div class="divider" aria-hidden="true"></div>
+    <div class="controls">
+      <button id="closeNotif" class="close-btn">Fermer</button>
+    </div>
+  </div>
+
+  <footer class="bg-bnp-blue text-white p-4 text-center">
+    <p>&copy; 2025 BNP Paribas. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    // Sidebar interactions
+    document.getElementById("openSidebar").addEventListener("click", function() {
+      document.getElementById("mySidebar").style.width = "250px";
+    });
+    document.getElementById("menuBtn").addEventListener("click", function() {
+      document.getElementById("mySidebar").style.width = "250px";
+    });
+    document.querySelectorAll(".sidebar a").forEach(item => {
+      item.addEventListener("click", function() {
+        document.getElementById("mySidebar").style.width = "0";
+      });
+    });
+    document.querySelectorAll(".sidebar a").forEach(item => {
+      if (item.textContent.trim() === "Déconnexion") {
+        item.addEventListener("click", function() {
+          window.location.href = "index.html";
+        });
+      }
+    });
+
+    // Popup behavior
+    const welcome = document.getElementById('welcomePopup');
+    const notif = document.getElementById('notifPopup');
+    const closeBtn = document.getElementById('closeNotif');
+
+    // Ensure welcome is above notif
+    welcome.style.zIndex = 2000;
+    notif.style.zIndex = 1000;
+
+    // Show both on load: notif visible but welcome in front; welcome auto-hide after 5s
+    window.addEventListener('load', function() {
+      // Make sure they are visible
+      welcome.style.display = 'flex';
+      notif.style.display = 'flex';
+
+      // After 5 seconds hide welcome
+      setTimeout(function() {
+        if (welcome) {
+          welcome.style.transition = 'opacity 400ms ease';
+          welcome.style.opacity = '0';
+          setTimeout(()=> welcome.style.display = 'none', 420);
+        }
+      }, 5000);
+    });
+
+    // Close notification on button click
+    closeBtn.addEventListener('click', function() {
+      notif.style.transition = 'opacity 300ms ease';
+      notif.style.opacity = '0';
+      setTimeout(()=> notif.style.display = 'none', 320);
+    });
+
+  </script>
+</body>
+</html>
